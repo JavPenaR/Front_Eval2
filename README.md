@@ -1,131 +1,25 @@
-# Frontend - Aplicación Web con Flask
+# Innovatech Chile - Frontend Application (Equipo Caltías) 🚀
 
-## Descripción
-Frontend desarrollado en Python con el framework Flask. Proporciona una interfaz web completa para la gestión de usuarios, con comunicación RESTful con el backend API.
+[cite_start]Este repositorio contiene el componente de interfaz de usuario para el proyecto de gestión de Innovatech Chile, etapa 2[cite: 26]. [cite_start]La solución ha sido diseñada bajo principios DevOps para garantizar un despliegue ágil, seguro y escalable en la nube de AWS[cite: 12, 158].
 
-## Versiones y Herramientas Requeridas
+## 🐳 Contenedorización (IE1)
+[cite_start]La aplicación ha sido dockerizada siguiendo las mejores prácticas de la industria[cite: 28, 88]:
+- [cite_start]**Dockerfile Multi-stage:** Se implementó una construcción en etapas para optimizar el tamaño de la imagen final y mejorar la seguridad al separar el entorno de compilación del de ejecución[cite: 29, 91, 129].
+- [cite_start]**Seguridad:** El contenedor se ejecuta bajo un usuario no-root para minimizar privilegios y reducir la superficie de ataque[cite: 91, 129].
+- [cite_start]**Optimización:** Limpieza de capas y gestión eficiente de dependencias para acelerar los tiempos de despliegue[cite: 91].
 
-### Lenguaje y Runtime
-- **Python**: Versión 3.8 o superior
-- **pip**: Versión 21.0 o superior (gestor de paquetes de Python)
+## 🛠️ Orquestación Local (IE2)
+[cite_start]Para facilitar el desarrollo y pruebas locales, se incluye un archivo `docker-compose.yml` que levanta el stack completo de servicios (Frontend, Backend y Base de Datos) de forma conjunta[cite: 30, 92, 139].
+- **Uso:** `docker-compose up -d`
+- [cite_start]**Redes:** Se define una red interna bridge para permitir la comunicación aislada entre los servicios[cite: 139].
 
-### Dependencias Principales
-- **Flask**: ^2.3.3 - Framework web micro para Python
-- **Flask-CORS**: ^4.0.0 - Middleware para habilitar CORS
-- **requests**: ^2.31.0 - Librería para peticiones HTTP
-- **python-dotenv**: ^1.0.0 - Manejo de variables de entorno
-- **Jinja2**: ^3.1.2 - Motor de plantillas (incluido con Flask)
+## 🔄 Pipeline CI/CD (IE4)
+[cite_start]Se implementó un flujo automatizado mediante **GitHub Actions**[cite: 39, 102]:
+- [cite_start]**Triggers:** El pipeline se activa automáticamente al realizar un `push` sobre la rama `deploy`[cite: 44, 113, 145].
+- [cite_start]**Flujo:** Construcción de imagen -> Publicación en Docker Hub -> Despliegue automático en instancia EC2 mediante SSH[cite: 40, 41, 42, 104, 144].
+- [cite_start]**Gestión de Secrets:** Uso de GitHub Secrets para proteger credenciales y variables críticas[cite: 43, 114, 146].
 
-## Instalación
-
-```bash
-# Crear entorno virtual (recomendado)
-python -m venv venv
-
-# Activar entorno virtual
-# Windows:
-venv\Scripts\activate
-# Linux/Mac:
-source venv/bin/activate
-
-# Instalar dependencias
-pip install -r requirements.txt
-```
-
-## Configuración
-
-1. Copiar el archivo de variables de entorno:
-```bash
-cp .env.example .env
-```
-
-2. Editar el archivo `.env` con tu configuración:
-```
-PORT=5000
-DEBUG=False
-BACKEND_URL=http://localhost:3000
-SECRET_KEY=clave_secreta_muy_segura_aqui
-```
-
-## Ejecución
-
-```bash
-# Para desarrollo
-python app.py
-
-# O con variables de entorno
-FLASK_ENV=development python app.py
-```
-
-## Estructura del Proyecto
-
-```
-frontend/
-├── app.py                 # Aplicación principal Flask
-├── requirements.txt       # Dependencias Python
-├── .env.example          # Ejemplo de variables de entorno
-├── .env                  # Variables de entorno (crear manualmente)
-├── templates/            # Plantillas HTML
-│   ├── base.html         # Plantilla base
-│   ├── index.html        # Página principal
-│   ├── crear_usuario.html# Formulario crear usuario
-│   ├── editar_usuario.html# Formulario editar usuario
-│   ├── 404.html          # Página error 404
-│   └── 500.html          # Página error 500
-├── static/               # Archivos estáticos (CSS, JS, imágenes)
-└── README.md             # Este archivo
-```
-
-## Funcionalidades
-
-### Páginas Disponibles
-- **Página Principal (`/`)**: Lista todos los usuarios con opciones de CRUD
-- **Crear Usuario (`/crear`)**: Formulario para agregar nuevos usuarios
-- **Editar Usuario (`/editar/<id>`)**: Formulario para modificar usuarios existentes
-- **Eliminar Usuario**: Botón de acción en la lista principal
-
-### Características Técnicas
-- **Responsive Design**: Interfaz adaptable a diferentes dispositivos
-- **Bootstrap 5**: Framework CSS para estilos modernos
-- **Font Awesome**: Iconos profesionales
-- **Validación**: Validación en cliente y servidor
-- **Mensajes Flash**: Notificaciones al usuario
-- **Manejo de Errores**: Páginas personalizadas para errores 404 y 500
-
-## Comunicación con Backend
-
-La aplicación se comunica con el backend API mediante peticiones HTTP REST:
-
-```python
-# Ejemplo de petición GET para obtener usuarios
-response = requests.get(f'{BACKEND_URL}/api/usuarios')
-usuarios = response.json()
-
-# Ejemplo de petición POST para crear usuario
-response = requests.post(f'{BACKEND_URL}/api/usuarios', json=datos_usuario)
-```
-
-## Puertos Requeridos
-
-### Para funcionamiento en contenedor:
-- **Puerto 5000**: Puerto del servidor frontend Flask (HTTP)
-- **Puerto 3000**: Puerto de comunicación con backend API (externo)
-
-### Explicación de puertos:
-- **5000**: Es el puerto donde escucha el servidor Flask para servir la aplicación web
-- **3000**: Es el puerto del backend API al que el frontend se conecta para obtener/enviar datos
-
-## Variables de Entorno
-
-| Variable | Descripción | Valor por Defecto |
-|----------|-------------|-------------------|
-| `PORT` | Puerto del servidor Flask | 5000 |
-| `DEBUG` | Modo debug (True/False) | False |
-| `BACKEND_URL` | URL del backend API | http://localhost:3000 |
-| `SECRET_KEY` | Clave secreta para sesiones | clave_secreta_por_defecto |
-
-## Notas Importantes
-- El backend API debe estar corriendo antes de iniciar el frontend
-- Asegúrate de que las URLs en las variables de entorno sean correctas
-- En producción, establece `DEBUG=False` y usa una `SECRET_KEY` segura
-- La aplicación está diseñada para funcionar con el backend API de este proyecto
+## ☁️ Despliegue en AWS (IE5)
+[cite_start]La instancia de Frontend es la única accesible desde Internet (IP Pública), respetando la arquitectura de seguridad definida[cite: 175]:
+- [cite_start]**Infraestructura:** Despliegue en Amazon EC2 dentro de una VPC personalizada[cite: 56, 121].
+- [cite_start]**Security Groups:** Solo se permite tráfico entrante por el puerto 80 (HTTP) y el puerto 22 para administración segura[cite: 57, 122].
