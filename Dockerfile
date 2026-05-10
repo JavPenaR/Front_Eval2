@@ -1,17 +1,18 @@
-# Etapa 1: Construcción
-FROM node:18-alpine AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+# Usamos una imagen ligera de Python
+FROM python:3.9-slim
 
-# Etapa 2: Producción
-FROM nginx:stable-alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-# Seguridad: Usuario no root
-RUN touch /var/run/nginx.pid && \
-    chown -R nginx:nginx /var/run/nginx.pid /usr/share/nginx/html /var/cache/nginx /var/log/nginx /etc/nginx/conf.d
-USER nginx
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Directorio de trabajo
+WORKDIR /app
+
+# Instalamos dependencias primero (por caché)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiamos el resto del código
+COPY . .
+
+# Flask usa el puerto 5000 por defecto
+EXPOSE 5000
+
+# Comando para arrancar la app
+CMD ["python", "app.py"]
