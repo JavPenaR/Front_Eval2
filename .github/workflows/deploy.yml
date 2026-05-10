@@ -33,5 +33,5 @@ jobs:
             # Detener y borrar el contenedor viejo si existe
             sudo docker stop front-app || true
             sudo docker rm front-app || true
-            # Correr el contenedor nuevo (Mapeamos puerto 80 al 5000 de Flask)
-            sudo docker run -d --name front-app -p 80:5000 ${{ secrets.DOCKER_USERNAME }}/innovatech-front:latest
+            # Correr el contenedor nuevo entregándole la IP del Backend
+            sudo docker run -d --name front-app -p 80:5000 -e BACKEND_URL=http://10.0.2.173:3000 ${{ secrets.DOCKER_USERNAME }}/innovatech-front:latest
