@@ -1,0 +1,19 @@
+# Entornos virtuales de Python
+venv/
+.venv/
+env/
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de sistema y Git
+.git
+.gitignore
+.env
+
+# Archivos de Docker y CI/CD
+Dockerfile
+.dockerignore
+.github/
