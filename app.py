@@ -10,6 +10,7 @@ load_dotenv()
 
 # Crear instancia de la aplicación Flask
 app = Flask(__name__)
+
 app.secret_key = os.getenv('SECRET_KEY', 'clave_secreta_por_defecto')
 
 # Habilitar CORS para permitir peticiones desde otros orígenes

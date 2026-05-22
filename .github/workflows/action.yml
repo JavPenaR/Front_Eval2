@@ -35,7 +35,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.BACK_REPO_ACCESS_TOKEN }}
-          repository: usuario-github/repo-back
+          repository: JavPenaR/Back-EVAL2
           event-type: front-actualizado
           client-payload: |
             {
